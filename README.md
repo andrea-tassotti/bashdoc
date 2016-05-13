@@ -13,9 +13,13 @@ The first line of comment will be summary for function documentation; other comm
 bashdoc search comment for the following special token:
 
 @author
+
 @see
+
 @note
+
 $1 .. $n  for parameters
+
 $? return code
 
 
