@@ -9,6 +9,17 @@
 						insummary=0
 						getline
 					}
+/^#[[:blank:]]*[\-][a-zA-Z]+/ { 
+						if (incomment) 
+						{ 
+							insummary=0
+							par=""
+							for(i=2;i<=NF;i++)
+								par=par" "$i
+							o[$2]=par
+							next
+						}
+					}
 /^#[[:blank:]]*[\@]author/ {
 						if (incomment)
 						{
@@ -65,10 +76,14 @@
 							print "Parameters :"
 							for(v in h)
 								print h[v];
+							print "Options    :"
+							for(v in o)
+								print o[v];
 							print ""
 						}
 				 		incomment=0
 						delete h
+						delete o
 						delete note
 						delete see
 						getline
