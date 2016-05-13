@@ -1,0 +1,92 @@
+#! /usr/bin/awk -f
+/^##/				{ 
+						incomment=1
+						insummary=1
+						text=""
+						getline
+					}
+/^#[[:blank:]]*$/	{
+						insummary=0
+						getline
+					}
+/^#[[:blank:]]*[\@]author/ {
+						if (incomment)
+						{
+							insummary=0
+							author=""
+							for(i=3;i<=NF;i++)
+								author=author$i" "
+							next
+						}
+					}
+/^#[[:blank:]]*[\@]note/ {
+						if (incomment)
+						{
+							insummary=0
+							n=""
+							for(i=3;i<=NF;i++)
+								n=n$i" "
+							note[length(note)]=n
+							next
+						}
+					}
+/^#[[:blank:]]*[\@]see/ {
+						if (incomment)
+						{
+							insummary=0
+							s=""
+							for(i=3;i<=NF;i++)
+								s=s$i" "
+							see[length(see)]=s
+							next
+						}
+					}
+/^#.*[\$][0-9?]+/	{
+						if (incomment)
+						{
+							par=""
+							for(i=2;i<=NF;i++)
+								par=par" "$i
+							h[$2]=par
+							getline
+						}
+					}
+/^function /		{ 
+						if ( incomment )
+						{
+							print "Function   : "$2;
+							print "Summary    : "summary
+							print "Description: "text
+							print "Author     : "author
+							for(v in note)
+								print "Note   : "note[v]
+							for(v in see)
+								print "See    : "see[v]
+							print "Parameters :"
+							for(v in h)
+								print h[v];
+							print ""
+						}
+				 		incomment=0
+						delete h
+						delete note
+						delete see
+						getline
+					}
+					{
+						if ( incomment )
+						{
+							if ( insummary )
+							{
+								summary=""
+								for(i=2;i<=NF;i++)
+									summary=summary$i" "
+							}
+							else
+							{
+								for(i=2;i<=NF;i++)
+									text=text$i" "
+							}
+						}
+					}
+
