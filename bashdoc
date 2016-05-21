@@ -59,7 +59,7 @@
 							for(i=2;i<=NF;i++)
 								par=par" "$i
 							h[$2]=par
-							getline
+							next
 						}
 					}
 /^function /		{ 
