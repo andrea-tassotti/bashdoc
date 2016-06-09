@@ -101,6 +101,7 @@
 							{
 								for(i=2;i<=NF;i++)
 									text=text$i" "
+								text=text"\n\t"
 							}
 						}
 					}
